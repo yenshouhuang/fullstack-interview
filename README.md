@@ -10,10 +10,12 @@ Your task is to build a product page that displays an array of available rooms, 
 - Display of Rooms: Fetch and display room details from the provided data.json.
 - Booking Feature: Implement a 'Book' button for each room to initiate the booking process.
 - Booking Workflow: Create a multi-step booking form which includes:
--- Collecting background information (e.g., name, salary).
--- Confirmation of room details, price, and date.
--- A mock interaction with a service like DocuSign for lease signing.
--- A welcome view upon completion.
+  - Collecting background information (e.g., name, salary).
+  - Confirmation of room details, price, and date.
+  - A mock interaction with a service like DocuSign for lease signing.
+  - A welcome view upon completion.
+  - State should be encoded in the URL
+  - The user should be able to go back steps
 
 ## API Mocking
 
@@ -22,7 +24,7 @@ All API calls should be mocked using Next.js API routes to simulate back-end fun
 ## Technical Requirements
 - Framework: Next.js with TypeScript.
 - Page Routing: Utilize Next.js page routing for navigation.
-- Data Handling: Use the provided data.json file for room details.
+- Data Handling: Use the provided data.json file for room details. User proper validation.
 - Mock APIs: All backend interactions should be mocked using Next.js API routes.
 
 ## Getting Started
