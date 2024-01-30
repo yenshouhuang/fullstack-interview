@@ -1,7 +1,7 @@
 # Habyt Fullstack Interview Project
 
 ## Overview
-Welcome to the Habyt Fullstack Interview Project! In this assignment, you will be creating a product page for our proptech platform.
+Welcome to the Habyt Fullstack Interview Project! In this assignment, you will be creating a product page. You have 48-hours to complete and return this project. 
 
 ## Objective
 Your task is to build a product page that displays an array of available rooms, each with specific details like address, price, availability date, and images. This information will be provided in a data.json file.
@@ -33,9 +33,9 @@ All API calls should be mocked using Next.js API routes to simulate back-end fun
 - Start the Development Server: Execute npm run dev or yarn dev.
 
 ## Submission Guidelines
-- Fork this repository and work on your fork.
+- Clone this repository.
 - Ensure the application is fully functional and meets the project objectives.
-- Upon completion, submit a pull request to the main repository with a detailed description of your implementation.
+- Zip the completed code (minus node modules) and submit.
 
 ## Evaluation Criteria
 - Functionality: Adherence to the provided specifications.
