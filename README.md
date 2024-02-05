@@ -8,6 +8,7 @@ Your task is to build a product page that displays an array of available rooms, 
 
 The data comes from the live Common.com bulk Internet Listing Service (ILS) feed, which is available at https://www.common.com/cmn-api/listings/common and the schema desciption is available here: https://www.common.com/cmn-api/docs#/integration/ListingsController_findAllCommonListings
 
+You can either pull from the feed directly or use the data.json file that includes the first 10 rooms. If you do use the feed you may limit the number of rooms shown to a reasonable number - or not - as you see fit.
 
 
 ## Key Features:
