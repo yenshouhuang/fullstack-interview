@@ -11,9 +11,10 @@ interface HouseCardProps {
 }
 
 const HouseCard = ( {house}: HouseCardProps) => {
-  const { id, propertyName, city, bedrooms, image, price, fullAddress, url, address, images, neighborhood, availableDate, unitSqft } = house;
+  const { id, propertyName, city, bedrooms, image, pricing, fullAddress, url, address, images, neighborhood, availableDate, unitSqft, monthlyPricing, amount } = house;
   
   const [isOpen, setIsOpen] = useState(false);
+  const houseRent = (pricing.monthlyPricing[1].amount / 11).toFixed(2);
 
   return (
     <div className="house-card group">
@@ -28,22 +29,27 @@ const HouseCard = ( {house}: HouseCardProps) => {
         </div>
       </div>
       <div className='relative w-full h-40 my-3 objext-contain'>
-        <img src={images[0].url} alt='house model' className='object-contain' />
+        <Image src={images[0].url} alt='house model' fill priority className='object-contain' />
       </div>
+      
       <div>
         <p className='flex mt-6 text-[32px] font-extrabold'>
           <span className='self-start text=[14px] font-semibold'>
               $
           </span>
-          1000{/* {houseRent} */}
+          {houseRent}
+          
           <span className='self-end text-[14px] font-semibold-medium'>
-              /month
+              /month 
           </span>
+        </p>
+        <p className='self-end text-[14px]' >
+          (12-month lease, 1 month free)
         </p>
       </div>
       
       <div className='relative flex w-full mt-2'>
-        <div className='flex w-full justify-between text-grey'>
+        <div className='flex group-hover:invisible w-full justify-between text-grey'>
           <div className='flex flex-col justify-center items-center gap-2'>
             <Image src='/bed.png' alt='bed' width={24} height={24} />
             <p className='text-[14px] font-semibold'>{bedrooms} Bedrooms</p>

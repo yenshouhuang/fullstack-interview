@@ -3,39 +3,39 @@
 import { useState, Fragment } from 'react';
 import Image from 'next/image'
 import { Combobox, Transition } from '@headlessui/react'
-import { locations } from '@/constants'
-import { SearchLocationProps } from '@/types'
+import { states } from '@/constants'
+import { SearchStatesProps } from '@/types'
 
 import React from 'react'
 
-const SearchLocation = ({ location, setLocation}: SearchLocationProps) => {
+const SearchStates = ({ state, setState }: SearchStatesProps) => {
     const [query, setQuery] = useState('');
-    const filteredLocations = query === "" 
-            ? locations 
-            : locations.filter((item) => (
+    const filteredStates = query === "" 
+            ? states 
+            : states.filter((item) => (
                 item.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')
             
             )))
 
     return (
         <div className='search-house'>
-            <Combobox value={location} onChange={setLocation}>
+            <Combobox value={state} onChange={setState}>
                 <div className='relative w-full'>
                     <Combobox.Button className='absolute top-[14px]'>
                         <Image
-                            src='/location.png'
+                            src='/states.png'
                             width={20}
                             height={20}
                             className='ml-4'
-                            alt='location' 
+                            alt='states' 
                         />
                     </Combobox.Button>
 
                     <Combobox.Input
                         className='search-house__input'
-                        placeholder='Search for a home'
-                        displayValue={(location:string)=>location}
-                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder='Which State...?'
+                        displayValue={(states:string)=>states}
+                        onChange={(e) => setState(e.target.value)}
                     />
 
                     <Transition
@@ -46,12 +46,12 @@ const SearchLocation = ({ location, setLocation}: SearchLocationProps) => {
                         afterLeave={() => setQuery('')}
                     >
                         <Combobox.Options>
-                          {filteredLocations.length === 0 && query !== '' ? (
+                          {filteredStates.length === 0 && query !== '' ? (
                           <Combobox.Option className='search-house__option' value={query} >
                             Create "{query}"
                           </Combobox.Option>
                         ): (
-                            filteredLocations.map((item) => (
+                            filteredStates.map((item) => (
                                 <Combobox.Option
                                     key={item}
                                     className={({active}) => ` relative search-house__option ${active ? 'bg-primary-blue text-white' : 'text-gray-900'}
@@ -83,4 +83,4 @@ const SearchLocation = ({ location, setLocation}: SearchLocationProps) => {
     )
 }
 
-export default SearchLocation
+export default SearchStates

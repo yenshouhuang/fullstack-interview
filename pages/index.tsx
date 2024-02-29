@@ -5,6 +5,7 @@ import Head from "next/head";
 import { fetchData } from "../utils/index";
 import React, { useState, useEffect } from 'react';
 import { HouseProps } from "@/types";
+import { bedrooms } from "@/constants";
 
 export const getServerSideProps = (async () => {
   const data =  await fetchData();
@@ -54,15 +55,13 @@ export default function Home(props: any) {
         <Hero />
         <div className="mt-12 padding-x padding-y max-width" id="discover">
           <div className="house__text-container">
-            <h1 className="text-4xl font-extrabold">Home Catalogue</h1>
-            <p>Explore the Home you like</p>
+            <h1 className="text-4xl font-extrabold">Home Listings</h1>
           </div>
           <div className="house_filters">
             <SearchBar />
 
             <div className="house__filter-container">
-              <CustomFilter title="city"/>
-              <CustomFilter title="bedrooms"/>
+              <CustomFilter title="bedrooms" options={bedrooms}/>
             </div>
           </div>
           {!isDataEmpty ? (
@@ -83,7 +82,7 @@ export default function Home(props: any) {
         </div>
       </main>
       {/* {renderListings()} */}
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

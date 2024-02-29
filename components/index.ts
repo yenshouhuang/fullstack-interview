@@ -4,7 +4,7 @@ import Footer from './Footer';
 import Navbar from './Navbar'; 
 import SearchBar from './SearchBar';
 import CustomFilter from './CustomFilter';
-import SearchLocation from './SearchLocation';
+import SearchStates from './SearchStates';
 import HouseCard from './HouseCard';
 import HouseDetails from './HouseDetails';
 
@@ -15,7 +15,7 @@ export{
   Footer,
   SearchBar,
   CustomFilter,
-  SearchLocation,
+  SearchStates,
   HouseCard,
   HouseDetails
 }

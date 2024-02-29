@@ -11,9 +11,9 @@ export interface CustomButtonProps {
     isDisabled?: boolean;
 }
 
-export interface SearchLocationProps {
-    location: string;
-    setLocation: (location: string) => void;
+export interface SearchStatesProps {
+    state: string;
+    setState: (states: string) => void;
 }
 
 export interface HouseProps {
@@ -22,7 +22,7 @@ export interface HouseProps {
     city: string;
     bedrooms: number;
     image: string;
-    price: string;
+    pricing: any;
     fullAddress: string;
     url: string;
     address: any;
@@ -30,6 +30,9 @@ export interface HouseProps {
     neighborhood: string;
     availableDate: string;
     unitSqft: number;
+    roomNumber: string;
+    monthlyPricing: any;
+    amount: number;
 }
 
 export interface CarProps {
@@ -46,3 +49,17 @@ export interface CarProps {
     transmission: string;
     year: number;
   }
+
+export interface FilterProps {
+    state: string;
+    city: string;
+} 
+
+export interface OptionProps {
+    title: string;
+    value: string;
+}
+export interface CustomFilterProps {
+    title: string;
+    options: OptionProps[];
+}
