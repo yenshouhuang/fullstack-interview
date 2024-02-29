@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import SearchBar from './SearchBar';
 import CustomFilter from './CustomFilter';
 import SearchLocation from './SearchLocation';
+import HouseCard from './HouseCard';
+import HouseDetails from './HouseDetails';
 
 export{
   Hero,
@@ -13,5 +15,7 @@ export{
   Footer,
   SearchBar,
   CustomFilter,
-  SearchLocation
+  SearchLocation,
+  HouseCard,
+  HouseDetails
 }
