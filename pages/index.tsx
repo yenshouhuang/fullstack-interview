@@ -1,31 +1,37 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import { CustomFilter, Footer, Hero, HouseCard, Navbar, SearchBar } from "@/components";
+import {
+  CustomFilter,
+  Footer,
+  Hero,
+  HouseCard,
+  Navbar,
+  SearchBar,
+} from "@/components";
 import Head from "next/head";
 import { fetchData } from "../utils/index";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { HouseProps } from "@/types";
 import { bedrooms } from "@/constants";
 
-export const getServerSideProps = (async () => {
-  const data =  await fetchData();
+export const getServerSideProps = async () => {
+  const data = await fetchData();
   return data;
-}) 
+};
 
 export default function Home(props: any) {
   // console.log(props);
-  const handleCreateNewBooking = async (listing:any) => {
-    const res = await fetch('/api/createBooking',{
-      method: 'POST',
+  const handleCreateNewBooking = async (listing: any) => {
+    const res = await fetch("/api/createBooking", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({listing})
-    
+      body: JSON.stringify({ listing }),
     });
     const bookingDetails = await res.json();
     console.log(bookingDetails);
-  }
+  };
 
   // const renderListings = () => {
   //   return props.data.map((listing: any) => {
@@ -41,15 +47,16 @@ export default function Home(props: any) {
   //     )
   //   })
   // }
-  
-  const isDataEmpty = !Array.isArray(props.data) || props.data.length < 0 || !props.data;
+
+  const isDataEmpty =
+    !Array.isArray(props.data) || props.data.length < 0 || !props.data;
 
   return (
     <>
       <Head>
-          <title>Habyt</title>
-          <meta name="description" content="Find, book, and rent easily" />
-          <link rel="icon" href="/logo.png" />
+        <title>Habyt</title>
+        <meta name="description" content="Find, book, and rent easily" />
+        <link rel="icon" href="/logo.png" />
       </Head>
       <Navbar />
       <main className="overflow-hidden">
@@ -62,24 +69,23 @@ export default function Home(props: any) {
             <SearchBar />
 
             <div className="home__filter-container">
-              <CustomFilter title="bedrooms" options={bedrooms}/>
+              <CustomFilter title="bedrooms" options={bedrooms} />
             </div>
           </div>
           {!isDataEmpty ? (
             <section>
               <div className="home__house-wrapper">
                 {props.data?.map((house: HouseProps) => (
-                <HouseCard house={house} />))}
+                  <HouseCard house={house} />
+                ))}
               </div>
             </section>
-          ): (
+          ) : (
             <div className="home-error-container">
               <h2 className="text-black text-x1 font-bold">Oops, no results</h2>
               <p>{props.data?.message}</p>
             </div>
-          )
-          
-          }
+          )}
         </div>
       </main>
       {/* {renderListings()} */}
@@ -87,4 +93,3 @@ export default function Home(props: any) {
     </>
   );
 }
-
