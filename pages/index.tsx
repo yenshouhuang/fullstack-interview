@@ -49,6 +49,7 @@ export default function Home(props: any) {
       <Head>
           <title>Habyt</title>
           <meta name="description" content="Find, book, and rent easily" />
+          <link rel="icon" href="/logo.png" />
       </Head>
       <Navbar />
       <main className="overflow-hidden">
@@ -57,10 +58,10 @@ export default function Home(props: any) {
           <div className="house__text-container">
             <h1 className="text-4xl font-extrabold">Home Listings</h1>
           </div>
-          <div className="house_filters">
+          <div className="home__filters">
             <SearchBar />
 
-            <div className="house__filter-container">
+            <div className="home__filter-container">
               <CustomFilter title="bedrooms" options={bedrooms}/>
             </div>
           </div>

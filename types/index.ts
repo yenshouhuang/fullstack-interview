@@ -33,6 +33,8 @@ export interface HouseProps {
     roomNumber: string;
     monthlyPricing: any;
     amount: number;
+    description: string;
+    listingSqft: number;
 }
 
 export interface CarProps {

@@ -7,6 +7,10 @@ import CustomFilter from './CustomFilter';
 import SearchStates from './SearchStates';
 import HouseCard from './HouseCard';
 import HouseDetails from './HouseDetails';
+import BackgroundInfoForm from './booking/BackgroundInfoForm';
+import RoomDetailsConfirmation from './booking/RoomDetailsConfirmation';
+import WelcomeView from './booking/WelcomeView';
+import MockDocuSign from './booking/MockDocuSign';
 
 export{
   Hero,
@@ -17,5 +21,9 @@ export{
   CustomFilter,
   SearchStates,
   HouseCard,
-  HouseDetails
+  HouseDetails,
+  BackgroundInfoForm,
+  RoomDetailsConfirmation,
+  WelcomeView,
+  MockDocuSign
 }

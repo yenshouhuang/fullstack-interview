@@ -17,10 +17,10 @@ const Hero = () => {
         <div className='hero'>
             <div className='flex-1 pt-36 padding-x'>
                 <h1 className='hero__title'>
-                    Find, book, or rent a place to stay -- fast and easy
+                    Find, book, and rent a place to stay -- fast and easy
                 </h1>
                 <p className='hero__subtitle'>
-                    Whether you’re looking for a place to stay or have a place to rent, we can help you find what you need.
+                    We can help you find what you need and get you settled in no time.
                 </p>
             <CustomButton 
                 title='Explore Now' 

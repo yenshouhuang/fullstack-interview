@@ -9,10 +9,10 @@ import { useRouter } from 'next/navigation';
 const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
     <button type='submit' className={`-ml-3 z-10 ${otherClasses}`}>
       <Image
-        src={"/magnifying-glass.png"}
+        src={"/magnifying-glass.svg"}
         alt={"magnifying glass"}
-        width={30}
-        height={30}
+        width={40}
+        height={40}
         className='object-contain'
       />
     </button>
@@ -58,32 +58,34 @@ const SearchBar = () => {
 
     return (
         <form className='seachbar' onSubmit={handleSearch}>
-            <div className='searchbar__item'>
-                <SearchStates
-                    state={state}
-                    setState={setState}
-                />
-                <SearchButton otherClasses='sm:hidden' />
+            <div className='flex'>
+                <div className='searchbar__item'>
+                    <SearchStates
+                        state={state}
+                        setState={setState}
+                    />
+                    <SearchButton otherClasses='sm:hidden' />
+                </div>
+                <div className='searchbar__item'>
+                    <Image
+                    src='/city.png'
+                    width={25}
+                    height={25}
+                    className='absolute w-[20px] h-[20px] ml-4'
+                    alt=''
+                    />
+                    <input
+                    type='text'
+                    name='city'
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder='Which City...?'
+                    className='searchbar__input'
+                    />
+                    <SearchButton otherClasses='sm:hidden' />
+                </div>
+                <SearchButton otherClasses='max-sm:hidden' />
             </div>
-            <div className='searchbar__item'>
-                <Image
-                src='/city.png'
-                width={25}
-                height={25}
-                className='absolute w-[20px] h-[20px] ml-4'
-                alt=''
-                />
-                <input
-                type='text'
-                name='city'
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder='Which City...?'
-                className='searchbar__input'
-                />
-                <SearchButton otherClasses='sm:hidden' />
-            </div>
-            <SearchButton otherClasses='max-sm:hidden' />
         </form>
     )
 }
