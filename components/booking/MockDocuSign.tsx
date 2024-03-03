@@ -36,7 +36,7 @@ const MockDocuSign = ({
     <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
       <Dialog.Title
         as="h3"
-        className="text-lg font-medium leading-6 text-gray-900"
+        className="text-xl font-bold leading-6 text-gray-900" 
       >
         Sign Your Lease
       </Dialog.Title>
@@ -134,7 +134,7 @@ const MockDocuSign = ({
       </div>
       <div className="mt-2">
         <p className="text-sm text-gray-500">
-          Please sign below to confirm your lease agreement.
+          Please confirm your lease agreement and sign below.
         </p>
       </div>
       <div className="mt-4 p-4 rounded-lg flex justify-center items-center">

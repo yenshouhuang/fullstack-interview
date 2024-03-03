@@ -311,7 +311,7 @@ const closeBookingProcess = () => setIsBookingDialogOpen(false);
 							</Transition.Child>
 							<div className="fixed inset-0 overflow-y-auto">
 								<div className="flex min-h-full items-center justify-center p-4 text-center">
-									<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+									<Dialog.Panel className="relative w-full max-w-3xl h-[90vh] overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
 									<BookingProcess
 										house={house}
 										onComplete={() => {

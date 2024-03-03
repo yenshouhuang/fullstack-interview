@@ -37,7 +37,7 @@ const BackgroundInfoForm = ({
     <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
       <Dialog.Title
         as="h2"
-        className="text-lg font-medium leading-6 text-gray-900"
+        className="text-xl font-bold leading-6 text-gray-900" 
       >
         Background Information
       </Dialog.Title>
@@ -90,7 +90,7 @@ const BackgroundInfoForm = ({
           />
         </div>
         <div>
-          <label htmlFor="salary" className="block text-sm font-medium text-gray-700">Salary</label>
+          <label htmlFor="salary" className="block text-sm font-medium text-gray-700">Salary per year</label>
           <input
             type="number"
             id="salary"
