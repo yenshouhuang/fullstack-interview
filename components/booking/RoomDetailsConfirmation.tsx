@@ -2,7 +2,7 @@ import { RoomDetailsConfirmationProps } from "@/types";
 import React from "react";
 import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { BackgroundInfoFormProps } from "@/types";
+import { BackgroundInfoFormProps, PricingType } from "@/types";
 import Image from "next/image";
 
 const RoomDetailsConfirmation = ({
@@ -16,12 +16,23 @@ const RoomDetailsConfirmation = ({
   const[startDate, setStartDate] = useState(bookingState.roomDetails.startDate);
   const[endDate, setEndDate] = useState(bookingState.roomDetails.endDate);
   const [isStartDateValid, setIsStartDateValid] = useState(true);
+  const [leaseTerm, setLeaseTerm] = useState(bookingState.roomDetails.leaseTerm || '');
+  const [selectedTerm, setSelectedTerm] = useState<any>(null);
 
   useEffect(() => {
     if (startDate && house?.availableDate) {
       setIsStartDateValid(new Date(startDate) >= new Date(house.availableDate));
     }
   }, [startDate, house?.availableDate]);
+
+  useEffect(() => {
+    if (startDate && leaseTerm) {
+      const startDateObj = new Date(startDate);
+      startDateObj.setMonth(startDateObj.getMonth() + parseInt(leaseTerm));
+      const endDateStr = startDateObj.toISOString().split('T')[0]; // Format YYYY-MM-DD
+      setEndDate(endDateStr);
+    }
+  }, [startDate, leaseTerm]);
   
   const handleNextPage = () => {
     if (isStartDateValid) {
@@ -29,6 +40,7 @@ const RoomDetailsConfirmation = ({
         ...bookingState,
         confirmed: true,
         roomDetails: {
+          leaseTerm: leaseTerm,
           startDate: startDate,
           endDate: endDate,
         },
@@ -36,13 +48,37 @@ const RoomDetailsConfirmation = ({
           id: house?.id,
           propertyName: house?.propertyName,
           address: house?.address,
-          availableDate: house?.availableDate,
+          availableDate: house?.availableDate
         },
       });
 
       setStep(2);
     }
   };
+
+  const calculateMonthlyPrice = () => {
+    console.log("term", leaseTerm)
+    const termPrice = house.pricing.monthlyPricing.find((term:any)=>{
+      // console.log("term/month", term.months)
+        return term.months === parseInt(leaseTerm)
+    })
+    console.log("termPrice", termPrice)
+    if (!termPrice) {
+      return "not available";
+    } else {
+      return `$${(termPrice.amount / termPrice.months).toFixed(2)}`;
+    }
+
+  }
+
+  const renderTermOptions = () => {
+    return house.pricing.monthlyPricing.map((pricing:PricingType , index:any) => (
+      <option key={index} value={pricing.months}>
+        {pricing.months} Months
+      </option>
+    ));
+  }
+
 
   return (
     <div className="relative w-full  overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
@@ -64,6 +100,23 @@ const RoomDetailsConfirmation = ({
         <div>
           Earliest Available Date: <span className="font-semibold">{house.availableDate}</span>
         </div>
+        <div className="flex flex-col mt-4">
+          <label htmlFor="leaseTerm" className="block text-sm font-medium text-gray-700">Lease Term</label>
+          <select
+            id="leaseTerm"
+            name="leaseTerm"
+            value={leaseTerm}
+            onChange={(e) => setLeaseTerm(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          >
+            <option value="">Select Lease Term</option>
+            {house.pricing.monthlyPricing.map((pricing:PricingType , index:any) => (
+              <option key={index} value={pricing.months}>
+                {pricing.months} Months
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="flex flex-col">
           <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">Start Date</label>
           <input type="date" id="startDate" name="trip-start" value={startDate} onChange={(e) => setStartDate(e.target.value)}
@@ -71,9 +124,15 @@ const RoomDetailsConfirmation = ({
         </div>
         <div className="flex flex-col">
           <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">End Date</label>
-          <input type="date" id="endDate" name="trip-end" value={endDate} onChange={(e) => setEndDate(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"/>
+          <span className="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2 bg-gray-50">
+            {endDate || 'Select start date and lease term'}
+          </span>
         </div>
+      </div>
+
+      <div>
+        <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">Monthly Rent:</label>
+        {calculateMonthlyPrice()}
       </div>
 
       {!isStartDateValid && (

@@ -8,8 +8,8 @@ type Data = {
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<any>,
 ) {
-    const { listing } = req.body;
-  res.status(200).json({ booking: "Booking created", listing: listing.address.fullAddress});
+    const { background, roomDetails, confirmed, house, documentSigned } = req.body;
+  res.status(200).json({ success: true, data: {message:"Booking Created", background, roomDetails, confirmed, house, documentSigned} });
 }

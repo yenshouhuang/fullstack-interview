@@ -37,6 +37,7 @@ function BookingProcess({ house, onComplete, closeBookingProcess }: BookingProce
     },
     confirmed: false,
     docusign:false,
+    documentSigned: false,
     }
   );
 

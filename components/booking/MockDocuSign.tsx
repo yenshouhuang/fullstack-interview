@@ -15,11 +15,22 @@ const MockDocuSign = ({
   bookingState,
   setBookingState,
 }: MockDocuSignProps) => {
-  const handleNextPage = () => {
+  const handleNextPage = async() => {
+    const res = await fetch("/api/createBooking", {
+      method: "POST",
+      body: JSON.stringify(bookingState),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const resJson = await res.json();
+    console.log("resJson", resJson);
     setBookingState({
       ...bookingState,
       confirmed: true,
       ...house,
+      ...bookingState.roomDetails,
+      documentSigned: true,
     });
 
     setStep(3);
@@ -31,6 +42,20 @@ const MockDocuSign = ({
     const image = sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png");
     setSignatureURL(image || null);
   };
+
+  const calculateMonthlyPrice = () => {
+    const termPrice = house.pricing.monthlyPricing.find((term:any)=>{
+      // console.log("term/month", term.months)
+        return term.months === parseInt(bookingState.roomDetails.leaseTerm)
+    })
+    console.log("termPrice", termPrice)
+    if (!termPrice) {
+      return "Set the lease term to calculate the monthly price";
+    } else {
+      return `${(termPrice.amount / termPrice.months).toFixed(2)}`;
+    }
+
+  }
 
   return (
     <div className="relative w-full overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
@@ -100,12 +125,12 @@ const MockDocuSign = ({
               <p>
                 Fixed Lease. This Agreement will be for a term beginning on
                 <strong> {bookingState.roomDetails.startDate}</strong> and
-                ending on _____________ (the “Term”).
+                ending on <strong>{bookingState.roomDetails.endDate}</strong> (the “Term”).
               </p>
 
               <p>
                 <strong>4. Rent.</strong> Tenant will pay Landlord a monthly
-                rent of $__________ for the Term. Rent will be payable in
+                rent of <strong>$ {calculateMonthlyPrice()} </strong> for the Term. Rent will be payable in
                 advance and due on the first day of each month during the Term.
                 The first rent payment is payable to Landlord when Tenant signs
                 this Agreement.

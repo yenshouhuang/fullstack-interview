@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { HouseProps, CarProps } from '@/types/index';
+import { HouseProps } from '@/types/index';
 import { CustomButton, HouseDetails } from '.';
 import { useRouter } from 'next/navigation';
 

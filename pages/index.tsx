@@ -1,12 +1,10 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
-  CustomFilter,
   Footer,
   Hero,
   HouseCard,
   Navbar,
-  SearchBar,
 } from "@/components";
 import Head from "next/head";
 import { fetchData } from "../utils/index";
@@ -54,16 +52,7 @@ export default function Home() {
         <div className="mt-12 padding-x padding-y max-width" id="discover">
           <div className="house__text-container">
             <h1 className="text-4xl font-extrabold">Home Listings</h1>
-          </div>
-
-          {/* <div className="home__filters">
-            <SearchBar />
-
-            <div className="home__filter-container">
-              <CustomFilter title="bedrooms" options={bedrooms} />
-            </div>
-          </div> */}
-          
+          </div>          
           {loading ? ( 
             <div className="flex justify-center items-center h-screen">
               <Image src="/loading.gif" alt="loading" width={600} height={600} />

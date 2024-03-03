@@ -37,21 +37,6 @@ export interface HouseProps {
     listingSqft: number;
 }
 
-export interface CarProps {
-    city_mpg: number;
-    class: string;
-    combination_mpg: number;
-    cylinders: number;
-    displacement: number;
-    drive: string;
-    fuel_type: string;
-    highway_mpg: number;
-    make: string;
-    model: string;
-    transmission: string;
-    year: number;
-  }
-
 export interface FilterProps {
     state: string;
     city: string;
@@ -113,4 +98,11 @@ export interface HouseDetailsProps {
     setStep: (step: number) => void;
     setBookingState: (state: any) => void;
     bookingState: any;
+  }
+
+  export interface PricingType {
+    name: string;
+    months: number;
+    amount: number;
+    concessionsApplied: string[];
   }
