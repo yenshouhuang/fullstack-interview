@@ -1,16 +1,15 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, forwardRef, useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { HouseProps } from "@/types";
+import { HouseProps, HouseDetailsProps } from "@/types";
 import { CustomButton } from ".";
-import BackgroundInfoForm from "./booking/BackgroundInfoForm";
 
-interface HouseDetailsProps {
-  isOpen: boolean;
-  closeModal: () => void;
-  house: HouseProps;
-}
+import BookingProcess from "./booking/BookingProcess";
+
+
 
 function camelCaseToSpaces(s: string) {
   // Insert a space before all caps and uppercase the first character
@@ -40,9 +39,24 @@ const HouseDetails = ({ isOpen, closeModal: closeParentModal, house }: HouseDeta
     monthlyPricing,
     amount,
   } = house;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const panelRef = useRef(null);
+  let MyDialogPanel = forwardRef(function (props, ref) {
+	return <Dialog.Panel className="…" ref={panelRef} {...props} />
+  })
+  
 
-  const [bookingStep, setBookingStep] = useState(0);
-  const startBookingProcess = () => setBookingStep(1);
+  const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
+//   const startBookingProcess = () => setBookingStep(1);
+  const startBookingProcess = () => {
+	setIsBookingDialogOpen(true)
+	if (!searchParams.get("bookingStep")) {
+	router.push("/?bookingStep=0", undefined, { shallow: true }); // Update the URL without a page refresh
+	}  
+};
+
+const closeBookingProcess = () => setIsBookingDialogOpen(false);
 
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
@@ -195,7 +209,6 @@ const HouseDetails = ({ isOpen, closeModal: closeParentModal, house }: HouseDeta
                     <h2 className="text-gray-500 capitalize min-w-[150px]">
                       Pricing Options:
                     </h2>
-
                     <div className="mt-3 flex flex-wrap gap-4">
                       {house.pricing.monthlyPricing.map(
                         (pricingOption: any, index: number) => (
@@ -257,17 +270,19 @@ const HouseDetails = ({ isOpen, closeModal: closeParentModal, house }: HouseDeta
                     </div>
 
                     <CustomButton
-                      title="Request Booking"
-                      // onClick={startBookingProcess}
+                      title="Book"
+                      handleClick={startBookingProcess}
                       containerStyles="bg-yellow-500 font-semibold rounded-full text-white py-6 my-6"
                     />
+
+					{/* Media Open */}
                     {isImageModalOpen && (
                       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                         <div className="bg-gray-200 p-4">
                           <img src={selectedImageUrl} alt="Selected" />
                           <button
                             onClick={() => setIsImageModalOpen(false)}
-                            className="bg-yellow-500 text-white rounded-lg py-2 my-8 px-8"
+                            className="bg-yellow-500 text-white rounded-lg py-2 my-4 px-8"
                           >
                             Close
                           </button>
@@ -275,7 +290,63 @@ const HouseDetails = ({ isOpen, closeModal: closeParentModal, house }: HouseDeta
                       </div>
                     )}
 
-                    {/* {bookingStep === 1 && <BackgroundInfoForm setBookingStep={setBookingStep} />} */}
+					{/* Booking Dialog */}
+					{isBookingDialogOpen && (
+						<Transition appear show={isBookingDialogOpen} as={Fragment}>
+							<Dialog as="div" className="relative z-20" onClose={() => setIsBookingDialogOpen(false)}>
+							<Transition.Child
+								as={Fragment}
+								enter="ease-out duration-300"
+								enterFrom="opacity-0"
+								enterTo="opacity-100"
+								leave="ease-in duration-200"
+								leaveFrom="opacity-100"
+								leaveTo="opacity-0"
+							>
+								<div className="fixed inset-0 bg-black bg-opacity-50" />
+							</Transition.Child>
+							<div className="fixed inset-0 overflow-y-auto">
+								<div className="flex min-h-full items-center justify-center p-4 text-center">
+								{/* <Transition.Child
+									// as={Fragment}
+									as={MyDialogPanel}
+									enter="ease-out duration-300"
+									enterFrom="opacity-0 scale-95"
+									enterTo="opacity-100 scale-100"
+									leave="ease-out duration-300"
+									leaveFrom="opacity-100 scale-100"
+									leaveTo="opacity-0 scale-95"
+								> */}
+									<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+									<BookingProcess
+										house={house}
+										onComplete={() => {
+										setIsBookingDialogOpen(false);
+										}}
+										closeBookingProcess={closeBookingProcess}
+									/>
+									</Dialog.Panel>
+								{/* </Transition.Child> */}
+								</div>
+							</div>
+							</Dialog>
+						</Transition>
+						)}
+
+
+					{/* {
+					bookingStep === 1 && (
+						<BookingProcess
+						house={house}
+						onComplete={() => {
+							setBookingStep(0); // Reset booking step or adjust based on your flow
+							closeModal(); // Close the modal if needed
+						}}
+						/>
+					)
+					} */}
+
+
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

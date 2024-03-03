@@ -65,3 +65,52 @@ export interface CustomFilterProps {
     title: string;
     options: OptionProps[];
 }
+
+export interface BookingProcessProps {
+    house: HouseProps;
+    onComplete: () => void;
+    closeBookingProcess: () => void;
+  }
+
+
+export interface HouseDetailsProps {
+    isOpen: boolean;
+    closeModal: () => void;
+    house: HouseProps;
+  }
+
+  export interface BackgroundInfoFormProps {
+    isOpen: boolean;
+    closeModal: () => void;
+    house: HouseProps;
+    setStep: (step: number) => void;
+    setBookingState: (state: any) => void;
+    bookingState: any;
+  }
+
+  export interface RoomDetailsConfirmationProps {
+    isOpen: boolean;
+    closeModal: () => void;
+    house: HouseProps;
+    setStep: (step: number) => void;
+    setBookingState: (state: any) => void;
+    bookingState: any;
+  }
+
+  export interface MockDocuSignProps {
+    isOpen: boolean;
+    closeModal: () => void;
+    house: HouseProps;
+    setStep: (step: number) => void;
+    setBookingState: (state: any) => void;
+    bookingState: any;
+  }
+
+  export interface WelcomeViewProps {
+    isOpen: boolean;
+    closeModal: () => void;
+    house: HouseProps;
+    setStep: (step: number) => void;
+    setBookingState: (state: any) => void;
+    bookingState: any;
+  }

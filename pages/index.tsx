@@ -14,13 +14,14 @@ import React, { useState, useEffect } from "react";
 import { HouseProps } from "@/types";
 import { bedrooms } from "@/constants";
 
-export const getServerSideProps = async () => {
-  const data = await fetchData();
-  return data;
-};
+// export const getServerSideProps = async () => {
+//   const data = await fetchData();
+//   return data;
+// };
 
-export default function Home(props: any) {
+export default function Home() {
   // console.log(props);
+  const [listings, setListings] = useState([]);
   const handleCreateNewBooking = async (listing: any) => {
     const res = await fetch("/api/createBooking", {
       method: "POST",
@@ -32,6 +33,15 @@ export default function Home(props: any) {
     const bookingDetails = await res.json();
     console.log(bookingDetails);
   };
+
+  const hadleFetchListing = async () => {
+    const data = await fetchData();
+    setListings(data.props.data);
+  }
+
+  useEffect(() => {
+    hadleFetchListing();
+  }, []);
 
   // const renderListings = () => {
   //   return props.data.map((listing: any) => {
@@ -49,7 +59,7 @@ export default function Home(props: any) {
   // }
 
   const isDataEmpty =
-    !Array.isArray(props.data) || props.data.length < 0 || !props.data;
+    !Array.isArray(listings) || listings.length < 0 || !listings;
 
   return (
     <>
@@ -65,17 +75,17 @@ export default function Home(props: any) {
           <div className="house__text-container">
             <h1 className="text-4xl font-extrabold">Home Listings</h1>
           </div>
-          <div className="home__filters">
+          {/* <div className="home__filters">
             <SearchBar />
 
             <div className="home__filter-container">
               <CustomFilter title="bedrooms" options={bedrooms} />
             </div>
-          </div>
+          </div> */}
           {!isDataEmpty ? (
             <section>
               <div className="home__house-wrapper">
-                {props.data?.map((house: HouseProps) => (
+                {listings?.map((house: HouseProps) => (
                   <HouseCard house={house} />
                 ))}
               </div>
@@ -83,7 +93,7 @@ export default function Home(props: any) {
           ) : (
             <div className="home-error-container">
               <h2 className="text-black text-x1 font-bold">Oops, no results</h2>
-              <p>{props.data?.message}</p>
+              {/* <p>{props.data?.message}</p> */}
             </div>
           )}
         </div>
