@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { HouseProps, CarProps } from '@/types/index';
 import { CustomButton, HouseDetails } from '.';
+import { useRouter } from 'next/navigation';
+
 
 interface HouseCardProps {
     house: HouseProps;
@@ -15,6 +17,7 @@ const HouseCard = ( {house}: HouseCardProps) => {
   
   const [isOpen, setIsOpen] = useState(false);
   const houseRent = (pricing.monthlyPricing[1].amount / 11).toFixed(2);
+  const router = useRouter();
 
   return (
     <div className="house-card group">
@@ -70,13 +73,22 @@ const HouseCard = ( {house}: HouseCardProps) => {
             containerStyles='w-full py-[16px] rounded-full bg-yellow-500'
             textStyles='text-white text-[14px] leading-[17px] font-bold'
             rightIcon='/right-arrow.svg'
-            handleClick={() => setIsOpen(true)}
+            handleClick={() => {
+              setIsOpen(true)
+              router.push(`/?houseId=${id}`, undefined);
+            }}
           />
         </div>
       </div>
 
       
-      <HouseDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} house={house} />
+      <HouseDetails 
+      isOpen={isOpen} 
+      closeModal={() => {
+        setIsOpen(false)
+        router.push(`/`, undefined);
+        }} 
+      house={house} />
     </div>
   )
 }

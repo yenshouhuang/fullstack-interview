@@ -14,49 +14,29 @@ import React, { useState, useEffect } from "react";
 import { HouseProps } from "@/types";
 import { bedrooms } from "@/constants";
 
+
+// Remove the getServerSideProps function because loading time from the server is too long and want to improve the user experience
+
 // export const getServerSideProps = async () => {
 //   const data = await fetchData();
 //   return data;
 // };
 
 export default function Home() {
-  // console.log(props);
   const [listings, setListings] = useState([]);
-  const handleCreateNewBooking = async (listing: any) => {
-    const res = await fetch("/api/createBooking", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ listing }),
-    });
-    const bookingDetails = await res.json();
-    console.log(bookingDetails);
-  };
+  const [loading, setLoading] = useState(false); 
 
-  const hadleFetchListing = async () => {
+  const handleFetchListing = async () => {
+    setLoading(true); 
     const data = await fetchData();
     setListings(data.props.data);
-  }
+    setLoading(false); 
+  };
 
   useEffect(() => {
-    hadleFetchListing();
+    handleFetchListing();
   }, []);
 
-  // const renderListings = () => {
-  //   return props.data.map((listing: any) => {
-  //     return (
-  //       <div key={listing.id}>
-  //         <h1>{listing.address.fullAddress}</h1>
-  //         <p>{listing.price}</p>
-  //         <div>
-  //           <img src={listing.images[0].url} alt={listing.name} width={300} height={200} />
-  //         </div>
-  //         <button onClick={()=> handleCreateNewBooking(listing)}>Book</button>
-  //       </div>
-  //     )
-  //   })
-  // }
 
   const isDataEmpty =
     !Array.isArray(listings) || listings.length < 0 || !listings;
@@ -75,6 +55,7 @@ export default function Home() {
           <div className="house__text-container">
             <h1 className="text-4xl font-extrabold">Home Listings</h1>
           </div>
+
           {/* <div className="home__filters">
             <SearchBar />
 
@@ -82,23 +63,26 @@ export default function Home() {
               <CustomFilter title="bedrooms" options={bedrooms} />
             </div>
           </div> */}
-          {!isDataEmpty ? (
+          
+          {loading ? ( 
+            <div className="flex justify-center items-center h-screen">
+              <Image src="/loading.gif" alt="loading" width={600} height={600} />
+            </div>
+          ) : !isDataEmpty ? (
             <section>
               <div className="home__house-wrapper">
                 {listings?.map((house: HouseProps) => (
-                  <HouseCard house={house} />
+                  <HouseCard key={house.id} house={house} />
                 ))}
               </div>
             </section>
           ) : (
             <div className="home-error-container">
               <h2 className="text-black text-x1 font-bold">Oops, no results</h2>
-              {/* <p>{props.data?.message}</p> */}
             </div>
           )}
         </div>
       </main>
-      {/* {renderListings()} */}
       <Footer />
     </>
   );

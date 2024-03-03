@@ -4,7 +4,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { BackgroundInfoFormProps } from "@/types";
 import Image from "next/image";
 
-const BackGroundInfoForm = ({
+const BackgroundInfoForm = ({
   isOpen,
   closeModal,
   house,
@@ -29,83 +29,98 @@ const BackGroundInfoForm = ({
         salary,
       },
     });
-    
+
     setStep(1);
   };
 
   return (
-    <div>
+    <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
       <Dialog.Title
         as="h2"
         className="text-lg font-medium leading-6 text-gray-900"
       >
         Background Information
       </Dialog.Title>
-      <div className="mt-2">
-        <p className="text-sm text-gray-500"></p>
+      <div className="grid grid-cols-1 gap-4 mt-4">
+        <p className="text-sm text-gray-500">Please fill in your background information.</p>
       </div>
-      <div>
+      <div className="grid grid-cols-1 gap-4 mt-4">
         <div>
-          <label htmlFor="firstName">First Name</label>
+          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
           <input
             type="text"
             id="firstName"
             name="firstName"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
         <div>
-          <label htmlFor="lastName">Last Name</label>
+          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
           <input
             type="text"
             id="lastName"
             name="lastName"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
         <div>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
           <input
             type="email"
             id="email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
         <div>
-          <label htmlFor="phone">Phone</label>
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
           <input
             type="tel"
             id="phone"
             name="phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
         <div>
-          <label htmlFor="salary">Salary</label>
+          <label htmlFor="salary" className="block text-sm font-medium text-gray-700">Salary</label>
           <input
             type="number"
             id="salary"
             name="salary"
             value={salary}
             onChange={(e) => setSalary(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
       </div>
-      <div className="mt-4">
-        <button onClick={handleNextPage}>Next</button>
-        <button onClick={() => setStep(-1)}>Back</button>
+      <div className="flex justify-between mt-6">
+        <button
+          onClick={() => setStep(-1)}
+          className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        >
+          Back
+        </button>
+        <button
+          onClick={handleNextPage}
+          className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Next
+        </button>
       </div>
 
       {/* Close Button with Image */}
       <button
         type="button"
         className="absolute top-0 right-0 m-4"
-        onClick={closeModal}
+        onClick={() => setStep(-1)}
       >
         <Image src="/close.svg" alt="close" width={20} height={20} />
       </button>
@@ -113,7 +128,7 @@ const BackGroundInfoForm = ({
   );
 };
 
-export default BackGroundInfoForm;
+export default BackgroundInfoForm;
 
 // <Transition appear show={true}>
 //   <Dialog as="div" className="relative z-10" onClose={closeModal}>

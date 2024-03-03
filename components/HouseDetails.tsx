@@ -52,7 +52,7 @@ const HouseDetails = ({ isOpen, closeModal: closeParentModal, house }: HouseDeta
   const startBookingProcess = () => {
 	setIsBookingDialogOpen(true)
 	if (!searchParams.get("bookingStep")) {
-	router.push("/?bookingStep=0", undefined, { shallow: true }); // Update the URL without a page refresh
+	router.push("/?bookingStep=background", undefined, { shallow: true }); // Update the URL without a page refresh
 	}  
 };
 
@@ -63,6 +63,7 @@ const closeBookingProcess = () => setIsBookingDialogOpen(false);
   const openImageModal = (imageUrl: string) => {
     setSelectedImageUrl(imageUrl);
     setIsImageModalOpen(true);
+	router.push(`/?image=${encodeURIComponent(imageUrl)}`, undefined, { shallow: true });
   };
   const closeModal = () => {
     closeParentModal(); // Call the original closeModal function passed as a prop
@@ -281,7 +282,10 @@ const closeBookingProcess = () => setIsBookingDialogOpen(false);
                         <div className="bg-gray-200 p-4">
                           <img src={selectedImageUrl} alt="Selected" />
                           <button
-                            onClick={() => setIsImageModalOpen(false)}
+                            onClick={() => {
+								setIsImageModalOpen(false)
+								router.push(`/?houseId=${id}`, undefined);
+								}}
                             className="bg-yellow-500 text-white rounded-lg py-2 my-4 px-8"
                           >
                             Close
@@ -307,16 +311,6 @@ const closeBookingProcess = () => setIsBookingDialogOpen(false);
 							</Transition.Child>
 							<div className="fixed inset-0 overflow-y-auto">
 								<div className="flex min-h-full items-center justify-center p-4 text-center">
-								{/* <Transition.Child
-									// as={Fragment}
-									as={MyDialogPanel}
-									enter="ease-out duration-300"
-									enterFrom="opacity-0 scale-95"
-									enterTo="opacity-100 scale-100"
-									leave="ease-out duration-300"
-									leaveFrom="opacity-100 scale-100"
-									leaveTo="opacity-0 scale-95"
-								> */}
 									<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
 									<BookingProcess
 										house={house}
@@ -326,25 +320,11 @@ const closeBookingProcess = () => setIsBookingDialogOpen(false);
 										closeBookingProcess={closeBookingProcess}
 									/>
 									</Dialog.Panel>
-								{/* </Transition.Child> */}
 								</div>
 							</div>
 							</Dialog>
 						</Transition>
 						)}
-
-
-					{/* {
-					bookingStep === 1 && (
-						<BookingProcess
-						house={house}
-						onComplete={() => {
-							setBookingStep(0); // Reset booking step or adjust based on your flow
-							closeModal(); // Close the modal if needed
-						}}
-						/>
-					)
-					} */}
 
 
                   </div>

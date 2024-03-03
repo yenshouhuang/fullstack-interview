@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { HouseProps, BookingProcessProps } from "@/types";
-import BackGroundInfoForm from "./BackgroundInfoForm";
+import BackgroundInfoForm from "./BackgroundInfoForm";
 import RoomDetailsConfirmation from "./RoomDetailsConfirmation";
 import MockDocuSign from "./MockDocuSign";
 import WelcomeView from "./WelcomeView";
@@ -41,13 +41,31 @@ function BookingProcess({ house, onComplete, closeBookingProcess }: BookingProce
   );
 
 const handleSetStep = (step: number) => {
+  let stepQueryString = "";
+
+  switch(step) {
+    case 0:
+      stepQueryString = "background";
+      break;
+    case 1:
+      stepQueryString = "roomDetails";
+      break;
+    case 2:
+      stepQueryString = "mockDocuSign";
+      break;
+    case 3:
+      stepQueryString = "welcomeView";
+      break;
+    default:
+      stepQueryString = "";
+  }
   if (step === -1) {
     setModalOpen(false);
     closeBookingProcess();
     router.push("/");
   } else {
     setBookingStep(step);
-    router.push(`/?bookingStep=${step}`, undefined, { shallow: true }); // Update the URL without a page refresh
+    router.push(`/?bookingStep=${stepQueryString}`, undefined, { shallow: true }); 
 	}  
 }
 
@@ -72,7 +90,7 @@ const handleCloseModal = () => {
   return (
     <div>
 
-      {bookingStep === 0 && <BackGroundInfoForm isOpen ={modalOpen} closeModal={handleCloseModal} house={house} setStep={handleSetStep} bookingState={bookingState} setBookingState={handleSetBookingState} />}
+      {bookingStep === 0 && <BackgroundInfoForm isOpen ={modalOpen} closeModal={handleCloseModal} house={house} setStep={handleSetStep} bookingState={bookingState} setBookingState={handleSetBookingState} />}
       {bookingStep === 1 && <RoomDetailsConfirmation isOpen ={modalOpen} closeModal={handleCloseModal} house={house} setStep={handleSetStep} bookingState={bookingState} setBookingState={handleSetBookingState}/>}
       {bookingStep === 2 && <MockDocuSign isOpen ={modalOpen} closeModal={handleCloseModal} house={house} setStep={handleSetStep} bookingState={bookingState} setBookingState={handleSetBookingState}/>}
       {bookingStep === 3 && <WelcomeView isOpen ={modalOpen} closeModal={handleCloseModal} house={house} setStep={handleSetStep} bookingState={bookingState} setBookingState={handleSetBookingState}/>}
