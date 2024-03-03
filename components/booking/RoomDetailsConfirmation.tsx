@@ -15,29 +15,37 @@ const RoomDetailsConfirmation = ({
 }: RoomDetailsConfirmationProps) => {
   const[startDate, setStartDate] = useState(bookingState.roomDetails.startDate);
   const[endDate, setEndDate] = useState(bookingState.roomDetails.endDate);
+  const [isStartDateValid, setIsStartDateValid] = useState(true);
 
+  useEffect(() => {
+    if (startDate && house?.availableDate) {
+      setIsStartDateValid(new Date(startDate) >= new Date(house.availableDate));
+    }
+  }, [startDate, house?.availableDate]);
+  
   const handleNextPage = () => {
-    setBookingState({
-      ...bookingState,
-      confirmed: true,
-      roomDetails: {
-        // ...bookingState.roomDetails,
-        startDate: startDate,
-        endDate: endDate,
-      },
-      house: {
-        id: house.id,
-        propertyName: house.propertyName,
-        address: house.address,
-        availableDate: house.availableDate
-      }
-    });
-    
-    setStep(2);
+    if (isStartDateValid) {
+      setBookingState({
+        ...bookingState,
+        confirmed: true,
+        roomDetails: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+        house: {
+          id: house?.id,
+          propertyName: house?.propertyName,
+          address: house?.address,
+          availableDate: house?.availableDate,
+        },
+      });
+
+      setStep(2);
+    }
   };
 
   return (
-    <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
+    <div className="relative w-full  overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
       <Dialog.Title as="h2" className="text-xl font-bold leading-6 text-gray-900">
         Room Details
       </Dialog.Title>
@@ -67,6 +75,12 @@ const RoomDetailsConfirmation = ({
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"/>
         </div>
       </div>
+
+      {!isStartDateValid && (
+        <div className="text-red-500 p-3 bg-red-100 rounded-lg">
+          House is not available on selected date.
+        </div>
+      )}
 
       <div className="flex justify-between mt-6">
         <button onClick={() => setStep(0)} className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
