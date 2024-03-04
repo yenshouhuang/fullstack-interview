@@ -39,7 +39,7 @@
 	- Begin booking process by providing essential background information.
 	- All fields are required. If not entering all information, an alert will show up. 
 
-	![alt text](https://github.com/yenshouhuang/fullstack-interview/blob/main/public/Readme/booking_process.png?raw=true)
+	![alt text](https://github.com/yenshouhuang/fullstack-interview/blob/main/public/Readme/background_info.png?raw=true)
 
 5. Booking Process - Room Details
 
