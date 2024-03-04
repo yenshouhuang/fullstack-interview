@@ -12,7 +12,7 @@
 1. Home Listing
 
 	- Explore listings with visuals and important details loaded from ILS feed. Limited to 10 listings.
-	- Hero page will render first with Hero image. When the home listings are still loading, a loading image will be shown. 
+	- Home page will render first with Hero image. When the home listings are still loading, a loading image will be shown. 
 
 	![alt text](https://github.com/yenshouhuang/fullstack-interview/blob/main/public/Readme/home_listing.png?raw=true)
 	![alt text](https://github.com/yenshouhuang/fullstack-interview/blob/main/public/Readme/home_listing_loading.png?raw=true)
