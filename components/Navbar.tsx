@@ -1,31 +1,31 @@
-import React from 'react'
+import React from "react";
 import Link from "next/link";
-import Image from 'next/image';
+import Image from "next/image";
 
-import CustomButton from './CustomButton';
+import CustomButton from "./CustomButton";
 
 const Navbar = () => {
   return (
-    <header className='w-full absolute z-10'>
-        <nav className='max-w-[1440px] mx-auto flex justify-between items-center sm:px-16 px-6 py-4'>
-            <Link href='/' className='flex justify-center items-center'>
-                <Image 
-                    src='/logo-habyt2.png' 
-                    alt='logo' 
-                    width={118} 
-                    height={18} 
-                    className='object-contain'
-                />
-            </Link>
+    <header className="w-full absolute z-10">
+      <nav className="max-w-[1440px] mx-auto flex justify-between items-center sm:px-16 px-6 py-4">
+        <Link href="/" className="flex justify-center items-center">
+          <Image
+            src="/logo-habyt2.png"
+            alt="logo"
+            width={118}
+            height={18}
+            className="object-contain"
+          />
+        </Link>
 
-            <CustomButton 
-                title='Sign In'
-                btnType='button'
-                containerStyles='text-primar-blue rounded-full bg-white text-sm px-6 py-2 font-semibold'
-            />
-        </nav>
-    </header> 
-  )
-}
+        <CustomButton
+          title="Sign In"
+          btnType="button"
+          containerStyles="text-primar-blue rounded-full bg-white text-sm px-6 py-2 font-semibold"
+        />
+      </nav>
+    </header>
+  );
+};
 
-export default Navbar
+export default Navbar;

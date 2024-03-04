@@ -1,16 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
-// Assuming you're fetching an array of items from an external API
 type Data = {
-  items: any[]; // Adjust the type according to the actual data structure
+  items: any[];
 };
 
 export default async function fetchData(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const url = "https://www.common.com/cmn-api/listings/common"; // The URL of the external API
+  const url = "https://www.common.com/cmn-api/listings/common"; // The URL of the API
 
   try {
     const response = await fetch(url);
@@ -18,10 +17,8 @@ export default async function fetchData(
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    // Assuming 'data' is an array of items; adjust if the structure is different
     // Slice the array to get only the first 10 items
     const firstTenItems = data.slice(0, 10);
-
     // Send the first 10 items as a response
     res.status(200).json({ items: firstTenItems });
   } catch (error) {

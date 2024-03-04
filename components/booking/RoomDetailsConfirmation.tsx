@@ -13,56 +13,72 @@ const RoomDetailsConfirmation = ({
   bookingState,
   setBookingState,
 }: RoomDetailsConfirmationProps) => {
-  const[startDate, setStartDate] = useState(bookingState.roomDetails.startDate);
-  const[endDate, setEndDate] = useState(bookingState.roomDetails.endDate);
+
+  // State hooks for validation and form submission
   const [isStartDateValid, setIsStartDateValid] = useState(true);
-  const [leaseTerm, setLeaseTerm] = useState(bookingState.roomDetails.leaseTerm || '');
-  const [selectedTerm, setSelectedTerm] = useState<any>(null);
-
-  useEffect(() => {
-    if (startDate && house?.availableDate) {
-      setIsStartDateValid(new Date(startDate) >= new Date(house.availableDate));
-    }
-  }, [startDate, house?.availableDate]);
-
-  useEffect(() => {
-    if (startDate && leaseTerm) {
-      const startDateObj = new Date(startDate);
-      startDateObj.setMonth(startDateObj.getMonth() + parseInt(leaseTerm));
-      const endDateStr = startDateObj.toISOString().split('T')[0]; // Format YYYY-MM-DD
-      setEndDate(endDateStr);
-    }
-  }, [startDate, leaseTerm]);
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   
+  // Effect hooks for validation
+  useEffect(() => {
+    if (bookingState.startDate && house?.availableDate) {
+      setIsStartDateValid(new Date(bookingState.startDate) >= new Date(house.availableDate));
+    }
+  }, [bookingState.startDate, house?.availableDate]);
+
+  // Effect hook to calculate the end date based on the start date and lease term
+  useEffect(() => {
+    if (bookingState.roomDetails.startDate && house?.availableDate) {
+      setIsStartDateValid(new Date(bookingState.roomDetails.startDate) >= new Date(house.availableDate));
+    }
+  }, [bookingState.roomDetails.startDate, house?.availableDate]);
+
+  useEffect(() => {
+    if (bookingState.roomDetails.startDate && bookingState.roomDetails.leaseTerm) {
+      const startDateObj = new Date(bookingState.roomDetails.startDate);
+      startDateObj.setMonth(startDateObj.getMonth() + parseInt(bookingState.roomDetails.leaseTerm));
+      const endDateStr = startDateObj.toISOString().split('T')[0]; // Format YYYY-MM-DD
+      setBookingState({
+        ...bookingState,
+        roomDetails: {
+          ...bookingState.roomDetails,
+          endDate: endDateStr,
+        },
+      });
+    }
+  }, [bookingState.roomDetails.startDate, bookingState.roomDetails.leaseTerm, setBookingState]);
+  
+  // Function to handle input changes
+  const handleInputChange = (e:any) => {
+    const { name, value } = e.target;
+    setBookingState({
+      ...bookingState,
+      roomDetails: {
+        ...bookingState.roomDetails,
+        [name]: value,
+      },
+    });
+  };
+  
+  // Function to handle the next page
   const handleNextPage = () => {
-    if (isStartDateValid) {
+    if (isStartDateValid && isFormValid()) {
       setBookingState({
         ...bookingState,
         confirmed: true,
-        roomDetails: {
-          leaseTerm: leaseTerm,
-          startDate: startDate,
-          endDate: endDate,
-        },
-        house: {
-          id: house?.id,
-          propertyName: house?.propertyName,
-          address: house?.address,
-          availableDate: house?.availableDate
-        },
       });
-
       setStep(2);
+    } else {
+      setAttemptedSubmit(true); 
     }
   };
 
+  // Function to calculate the monthly price
   const calculateMonthlyPrice = () => {
-    console.log("term", leaseTerm)
     const termPrice = house.pricing.monthlyPricing.find((term:any)=>{
-      // console.log("term/month", term.months)
-        return term.months === parseInt(leaseTerm)
+
+        return term.months === parseInt(bookingState.roomDetails.leaseTerm)
     })
-    console.log("termPrice", termPrice)
+
     if (!termPrice) {
       return "not available";
     } else {
@@ -71,14 +87,12 @@ const RoomDetailsConfirmation = ({
 
   }
 
-  const renderTermOptions = () => {
-    return house.pricing.monthlyPricing.map((pricing:PricingType , index:any) => (
-      <option key={index} value={pricing.months}>
-        {pricing.months} Months
-      </option>
-    ));
+  // Function to check if the form is valid
+  const isFormValid = () => {
+    
+    const {leaseTerm, startDate} = bookingState.roomDetails;
+    return bookingState.roomDetails.leaseTerm && bookingState.roomDetails.startDate;
   }
-
 
   return (
     <div className="relative w-full  overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
@@ -90,6 +104,7 @@ const RoomDetailsConfirmation = ({
           Confirm Your Booking Details
         </p>
       </div>
+      {/* Form fields for lease term, start date, end date, and property details */}
       <div className="grid grid-cols-1 gap-4 mt-4">
         <div>
           Property Name: <span className="font-semibold">{house.propertyName}</span>
@@ -105,8 +120,8 @@ const RoomDetailsConfirmation = ({
           <select
             id="leaseTerm"
             name="leaseTerm"
-            value={leaseTerm}
-            onChange={(e) => setLeaseTerm(e.target.value)}
+            value={bookingState.roomDetails.leaseTerm}
+            onChange={handleInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           >
             <option value="">Select Lease Term</option>
@@ -119,18 +134,19 @@ const RoomDetailsConfirmation = ({
         </div>
         <div className="flex flex-col">
           <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">Start Date</label>
-          <input type="date" id="startDate" name="trip-start" value={startDate} onChange={(e) => setStartDate(e.target.value)}
+          <input type="date" id="startDate" name="startDate" value={bookingState.roomDetails.startDate} onChange={handleInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"/>
         </div>
         <div className="flex flex-col">
           <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">End Date</label>
           <span className="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm p-2 bg-gray-50">
-            {endDate || 'Select start date and lease term'}
+            {bookingState.roomDetails.endDate || 'Select start date and lease term'}
           </span>
         </div>
       </div>
 
       <div>
+        {/* Price calculation */}
         <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">Monthly Rent:</label>
         {calculateMonthlyPrice()}
       </div>
@@ -140,7 +156,12 @@ const RoomDetailsConfirmation = ({
           House is not available on selected date.
         </div>
       )}
-
+      {/* Alert message */}
+      {attemptedSubmit && !isFormValid() && (
+        <div className="text-red-500 p-3 bg-red-100 rounded-lg">
+          Please fill in all fields to proceed.
+        </div>
+      )}
       <div className="flex justify-between mt-6">
         <button onClick={() => setStep(0)} className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
           Back

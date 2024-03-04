@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { BackgroundInfoFormProps } from "@/types";
 import Image from "next/image";
 import SignaturePad from "react-signature-canvas";
-import LeaseAgreement from "./LeaseAgreement";
+
 
 const MockDocuSign = ({
   isOpen,
@@ -15,7 +15,47 @@ const MockDocuSign = ({
   bookingState,
   setBookingState,
 }: MockDocuSignProps) => {
-  const handleNextPage = async() => {
+  // Reference to the signature pad component
+  const sigCanvas = useRef<SignaturePad>(null);
+  // State to store the URL of the saved signature
+  const [signatureURL, setSignatureURL] = useState<string | null>(null);
+
+  // Function to clear the signature pad
+  const clear = () => sigCanvas.current?.clear();
+  // Function to save the signature as a data URL
+  const save = () => {
+    const image = sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png");
+    setSignatureURL(image || null);
+  };
+
+  // Function to calculate monthly rent based on selected lease term
+  const calculateMonthlyPrice = () => {
+    const termPrice = house.pricing.monthlyPricing.find((term:any)=>{
+
+        return term.months === parseInt(bookingState.roomDetails.leaseTerm)
+    })
+    if (!termPrice) {
+      return "Set the lease term to calculate the monthly price";
+    } else {
+      return `${(termPrice.amount / termPrice.months).toFixed(2)}`;
+    }
+
+  }
+
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
+  // Checks if the form (signature) is valid for submission
+  const isFormValid = () => {
+    return signatureURL !== null;
+  }
+
+  const handleNextPage = async () => {
+    if (!isFormValid()) {
+      // If the form is not valid (signature not saved), set attemptedSubmit to true to trigger the alert
+      setAttemptedSubmit(true);
+      return; // Prevent proceeding to the next step
+    }
+  
+    // Simulate sending data to a backend service
     const res = await fetch("/api/createBooking", {
       method: "POST",
       body: JSON.stringify(bookingState),
@@ -32,30 +72,9 @@ const MockDocuSign = ({
       ...bookingState.roomDetails,
       documentSigned: true,
     });
-
-    setStep(3);
+  
+    setStep(3); // Proceed to the next step only if the form is valid
   };
-  const sigCanvas = useRef<SignaturePad>(null);
-  const [signatureURL, setSignatureURL] = useState<string | null>(null);
-  const clear = () => sigCanvas.current?.clear();
-  const save = () => {
-    const image = sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png");
-    setSignatureURL(image || null);
-  };
-
-  const calculateMonthlyPrice = () => {
-    const termPrice = house.pricing.monthlyPricing.find((term:any)=>{
-      // console.log("term/month", term.months)
-        return term.months === parseInt(bookingState.roomDetails.leaseTerm)
-    })
-    console.log("termPrice", termPrice)
-    if (!termPrice) {
-      return "Set the lease term to calculate the monthly price";
-    } else {
-      return `${(termPrice.amount / termPrice.months).toFixed(2)}`;
-    }
-
-  }
 
   return (
     <div className="relative w-full overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
@@ -153,7 +172,8 @@ const MockDocuSign = ({
                   <p>
                     <strong>Tenant Signature</strong>
                   </p>
-                  {signatureURL ? (
+                  {/* If signature is saved, display the image */}
+                  {signatureURL ? (  
                     <img
                       src={signatureURL}
                       alt="Signature"
@@ -182,6 +202,7 @@ const MockDocuSign = ({
         </p>
       </div>
       <div className="mt-4 p-4 rounded-lg flex justify-center items-center">
+        {/* Signature Pad for signing the document */}
         <SignaturePad
           canvasProps={{
             width: 500,
@@ -192,12 +213,14 @@ const MockDocuSign = ({
         />
       </div>
       <div className="flex justify-center gap-4 mt-4">
+        {/* Buttons for clearing the signature */}
         <button
           onClick={clear}
           className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >
           Clear
         </button>
+        {/* Buttons for saving the signature */}
         <button
           onClick={save}
           className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -205,6 +228,13 @@ const MockDocuSign = ({
           Save
         </button>
       </div>
+      {/* Alert message */}
+      {attemptedSubmit && !isFormValid() && (
+        <div className="text-red-500 p-3 bg-red-100 rounded-lg">
+          Please sign the lease agreement to proceed.
+        </div>
+      )}
+      
       <div className="flex justify-between mt-4">
         <button
           onClick={() => setStep(1)}

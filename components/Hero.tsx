@@ -6,7 +6,7 @@ import CustomButton from "./CustomButton";
 
 const Hero = () => {
   const handleScroll = () => {
-    const nextSection = document.getElementById("discover");
+    const nextSection = document.getElementById("discover"); // Get the next section by id, in this case, the discover section - house listings
 
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: "smooth" });

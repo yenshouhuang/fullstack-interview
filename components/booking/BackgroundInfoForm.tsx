@@ -12,32 +12,37 @@ const BackgroundInfoForm = ({
   bookingState,
   setBookingState,
 }: BackgroundInfoFormProps) => {
-  const [firstName, setFirstName] = useState(bookingState.background.firstName);
-  const [lastName, setLastName] = useState(bookingState.background.lastName);
-  const [email, setEmail] = useState(bookingState.background.email);
-  const [phone, setPhone] = useState(bookingState.background.phone);
-  const [salary, setSalary] = useState(bookingState.background.salary);
 
+  // State to track if a submit attempt was made without all fields being valid
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
-  const isFormValid = () => firstName && lastName && email && phone && salary;
 
+  // Function to check the validity of the form by ensuring all required fields are filled
+  const isFormValid = () => {
+    const { firstName, lastName, email, phone, salary } = bookingState.background;
+    return firstName && lastName && email && phone && salary;
+  };
+  
+  // Handles input changes by updating the bookingState with new values
+  const handleInputChange = (e:any) => {
+    const { name, value } = e.target;
+    setBookingState({
+      ...bookingState,
+      background: {
+        ...bookingState.background,
+        [name]: value,
+      },
+    });
+  };
+
+  // Function to handle moving to the next page; if form is valid, proceed, otherwise indicate submission attempt
   const handleNextPage = () => {
     if (isFormValid()) {
-      setBookingState({
-        ...bookingState,
-        background: {
-          firstName,
-          lastName,
-          email,
-          phone,
-          salary,
-        },
-      });
       setStep(1);
     } else {
-      setAttemptedSubmit(true); // Indicate an attempt was made to submit the form without all fields filled
+      setAttemptedSubmit(true); 
     }
   };
+
 
   return (
     <div className="relative w-full overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
@@ -52,6 +57,10 @@ const BackgroundInfoForm = ({
           Please fill in your background information.
         </p>
       </div>
+
+      {/* Input fields for background information */}
+      {/* Each input field updates its respective part of the bookingState on change */}
+      {/* The form includes basic validation and styling for focus */}
       <div className="grid grid-cols-1 gap-4 mt-4">
         <div>
           <label
@@ -64,8 +73,8 @@ const BackgroundInfoForm = ({
             type="text"
             id="firstName"
             name="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={bookingState.background.firstName}
+            onChange={handleInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
@@ -80,8 +89,8 @@ const BackgroundInfoForm = ({
             type="text"
             id="lastName"
             name="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={bookingState.background.lastName}
+            onChange={handleInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
@@ -96,8 +105,9 @@ const BackgroundInfoForm = ({
             type="email"
             id="email"
             name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            value={bookingState.background.email}
+            onChange={handleInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
@@ -112,8 +122,8 @@ const BackgroundInfoForm = ({
             type="tel"
             id="phone"
             name="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            value={bookingState.background.phone}
+            onChange={handleInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
@@ -128,18 +138,21 @@ const BackgroundInfoForm = ({
             type="number"
             id="salary"
             name="salary"
-            value={salary}
-            onChange={(e) => setSalary(e.target.value)}
+            value={bookingState.background.salary}
+            onChange={handleInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-md p-3 text-gray-700"
           />
         </div>
       </div>
+      
       {/* Alert message */}
       {attemptedSubmit && !isFormValid() && (
         <div className="text-red-500 p-3 bg-red-100 rounded-lg">
           Please fill in all fields to proceed.
         </div>
       )}
+
+      {/* Navigation buttons */}
       <div className="flex justify-between mt-6">
         <button
           onClick={() => setStep(-1)}
